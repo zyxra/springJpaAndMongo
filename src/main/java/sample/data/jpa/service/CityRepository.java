@@ -38,6 +38,8 @@ public interface CityRepository extends PagingAndSortingRepository<City, Long> {
 
 	public City findByMap(String map);
 
-	public City findByNameAndMap(String name, String map);
+	public List<City> findByNameAndMap(@Param("name") String name, @Param("map") String map);
+
+	public List<City> findByNameLike(@Param("name") String name);
 
 }

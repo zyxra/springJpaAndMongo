@@ -1,8 +1,8 @@
-spring.data.rest.base-uri=/api
-server.port: 9000
+#spring.data.rest.base-uri=/api
+#server.port: 9000
 management.port: 9001
 management.address: 0.0.0.0
-management.context-path=/admin
+#management.context-path=/admin
 #management.security.enabled=false
 
 # DataSource settings: set here configurations for the database connection. In 

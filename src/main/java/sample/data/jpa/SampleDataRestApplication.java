@@ -49,19 +49,20 @@ public class SampleDataRestApplication implements CommandLineRunner{
 		this.attractions.save(new Attractions("Башня", "Башня1"));
 
 		this.city.save(new City("Атланта", "США", "33.7489, -84.3879", "GA"));
+		this.city.save(new City("Atlanta", "USA", "33.7489, -84.3879", "GA"));
 
 		this.customer.save(new Customer("Alice", "Smith"));
 
 		//mongoOperation.save(user);
 
 		// fetch all customers
-		System.out.println("Attractions found with findAll():");
-		System.out.println("-------------------------------");
-		for (Attractions attraction : this.attractions.findAll()) {
-			System.out.println(attraction);
-		}
-		System.out.println();
-
+//		System.out.println("Attractions found with findAll():");
+//		System.out.println("-------------------------------");
+//		for (Attractions attraction : this.attractions.findAll()) {
+//			System.out.println(attraction);
+//		}
+//		System.out.println();
+/*
 		System.out.println("Customer found with findByDescription('Мост1'):");
 		System.out.println("--------------------------------");
 		System.out.println(this.attractions.findByDescription("Мост1"));
@@ -75,7 +76,12 @@ public class SampleDataRestApplication implements CommandLineRunner{
 		System.out.println(this.city.findByNameAndMap("Атланта","33.7489, -84.3879"));
 
 		System.out.println();
-		System.out.println(this.city.findByNameAndCountryAllIgnoringCase("London","UK"));
+		System.out.println(this.city.findByNameAndCountryAllIgnoringCase("London","UK"));*/
+
+/*		System.out.println("City found findByNameLike:");
+		for (City city: this.city.findByNameLike("Atlanta")){
+			System.out.println(city);
+		}*/
 
 	}
 
