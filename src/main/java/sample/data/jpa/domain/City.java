@@ -16,19 +16,13 @@
 
 package sample.data.jpa.domain;
 
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
-
-import java.io.Serializable;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import java.io.Serializable;
 
 @Entity
-@ToString(exclude="id")
 public class City implements Serializable {
 
 	private static final long serialVersionUID = 1L;
@@ -38,16 +32,16 @@ public class City implements Serializable {
 	public Long id;
 
 	@Column(nullable = false)
-	@Getter @Setter public String name;
+	public String name;
 
 	@Column(nullable = false)
-	@Getter @Setter public String state;
+	public String state;
 
 	@Column(nullable = false)
-	@Getter @Setter public String country;
+	public String country;
 
 	@Column(nullable = false)
-	@Getter @Setter public String map;
+	public String map;
 
 	protected City() {
 	}
@@ -58,5 +52,41 @@ public class City implements Serializable {
 		this.country = country;
 		this.map = map;
 		this.state = state;
+	}
+
+	public String toString() {
+		return "sample.data.jpa.domain.City(name=" + this.name + ", state=" + this.state + ", country=" + this.country + ", map=" + this.map + ")";
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public void setState(String state) {
+		this.state = state;
+	}
+
+	public void setCountry(String country) {
+		this.country = country;
+	}
+
+	public void setMap(String map) {
+		this.map = map;
+	}
+
+	public String getName() {
+		return this.name;
+	}
+
+	public String getState() {
+		return this.state;
+	}
+
+	public String getCountry() {
+		return this.country;
+	}
+
+	public String getMap() {
+		return this.map;
 	}
 }

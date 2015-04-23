@@ -23,7 +23,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpMethod;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import sample.data.jpa.service.*;
 import sample.data.jpa.domain.*;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -55,7 +57,7 @@ public class SampleDataRestApplication implements CommandLineRunner{
 	@Autowired
 	private CustomerRepository customer;
 
-	@Override
+	// TODO @Override
 	public void run(String... args) throws Exception {
 		
 		this.attractions.deleteAll();
@@ -72,9 +74,10 @@ public class SampleDataRestApplication implements CommandLineRunner{
 		this.city.save(new City("Atlanta", "USA", "33.7489, -84.3879", "GA"));
 
 		this.customer.save(new Customer("Alice", "Smith"));
-		System.out.println("Account user");
+
+/*		System.out.println("Account user");
 		Account a = accountRepository.findByUsername("egor");
-		System.out.println(a.getUsername());
+		System.out.println(a.getUsername());*/
 
 		//mongoOperation.save(user);
 
@@ -101,10 +104,10 @@ public class SampleDataRestApplication implements CommandLineRunner{
 		System.out.println();
 		System.out.println(this.city.findByNameAndCountryAllIgnoringCase("London","UK"));*/
 
-		System.out.println("City found findByNameLike:");
+/*		System.out.println("City found findByNameLike:");
 		for (City city: this.city.findByNameLike("Atlanta")){
 			System.out.println(city);
-		}
+		}*/
 
 	}
 
@@ -129,12 +132,12 @@ class WebSecurityConfiguration extends GlobalAuthenticationConfigurerAdapter {
 	UserDetailsService userDetailsService() {
 		return new UserDetailsService() {
 
-			@Override
+			// TODO @Override
 			public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 				Account account = accountRepository.findByUsername(username);
 				if(account != null) {
 					return new User(account.getUsername(), account.getPassword(), true, true, true, true,
-							AuthorityUtils.createAuthorityList("USER"));
+							AuthorityUtils.commaSeparatedStringToAuthorityList("ROLE_USER, ROLE_ADMIN"));
 				} else {
 					throw new UsernameNotFoundException("could not find the user '"
 							+ username + "'");
@@ -145,6 +148,7 @@ class WebSecurityConfiguration extends GlobalAuthenticationConfigurerAdapter {
 }
 
 @EnableWebSecurity
+@EnableGlobalMethodSecurity(prePostEnabled = true)
 @Configuration
 class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
@@ -153,9 +157,9 @@ class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		http
 				.httpBasic().and()
 				.authorizeRequests()
-				.antMatchers(HttpMethod.GET, "/attractions").hasRole("ADMIN")
-				.antMatchers(HttpMethod.PUT, "/customers/**").hasRole("ADMIN")
-				.antMatchers(HttpMethod.PATCH, "/hotels/**").hasRole("ADMIN").and()
+				.antMatchers(HttpMethod.GET, "/attractions").hasRole("USER")
+				.antMatchers(HttpMethod.PUT, "/customers*").hasRole("ADMIN")
+				.antMatchers(HttpMethod.PATCH, "/hotels*").hasRole("ADMIN").and()
 				.csrf().disable();
 	}
 }

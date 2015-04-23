@@ -16,19 +16,15 @@
 
 package sample.data.jpa.domain;
 
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
 import org.springframework.data.annotation.Id;
 
-@ToString(exclude="id")
 public class Customer {
 
 	@Id
 	public String id;
 
-	@Getter @Setter public String firstName;
-	@Getter @Setter public String lastName;
+	public String firstName;
+	public String lastName;
 
 	public Customer() {
 	}
@@ -36,5 +32,25 @@ public class Customer {
 	public Customer(String firstName, String lastName) {
 		this.firstName = firstName;
 		this.lastName = lastName;
+	}
+
+	public String getFirstName() {
+		return this.firstName;
+	}
+
+	public String getLastName() {
+		return this.lastName;
+	}
+
+	public void setFirstName(String firstName) {
+		this.firstName = firstName;
+	}
+
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
+	}
+
+	public String toString() {
+		return "sample.data.jpa.domain.Customer(firstName=" + this.getFirstName() + ", lastName=" + this.getLastName() + ")";
 	}
 }
