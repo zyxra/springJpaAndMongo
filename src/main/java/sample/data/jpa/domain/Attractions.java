@@ -1,13 +1,17 @@
 package sample.data.jpa.domain;
 
 import java.io.Serializable;
-
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
 @Entity
+@ToString(exclude="id")
 public class Attractions implements Serializable {
 
 	public static final long serialVersionUID = 1L;
@@ -17,10 +21,10 @@ public class Attractions implements Serializable {
 	public Long id;
 
 	@Column(nullable = false)
-	public String name;
+	@Getter @Setter public String name;
 
 	@Column(nullable = false)
-	public String description;
+	@Getter @Setter public String description;
 
 	protected Attractions() {
 	}
@@ -29,18 +33,5 @@ public class Attractions implements Serializable {
 		super();
 		this.name = name;
 		this.description =description;
-	}
-
-	public String getName() {
-		return this.name;
-	}
-
-	public String getDescription() {
-		return this.description;
-	}
-
-	@Override
-	public String toString() {
-		return getName() + " " + getDescription();
 	}
 }

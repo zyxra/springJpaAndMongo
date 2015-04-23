@@ -23,11 +23,28 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.http.HttpMethod;
 import sample.data.jpa.service.*;
 import sample.data.jpa.domain.*;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.authentication.configurers.GlobalAuthenticationConfigurerAdapter;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.authority.AuthorityUtils;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Bean;
 
 @SpringBootApplication
 public class SampleDataRestApplication implements CommandLineRunner{
+
+	@Autowired
+	private AccountRepository accountRepository;
 
 	@Autowired
 	private AttractionsRepository attractions;
@@ -43,6 +60,9 @@ public class SampleDataRestApplication implements CommandLineRunner{
 		
 		this.attractions.deleteAll();
 
+		this.accountRepository.deleteAll();
+		this.accountRepository.save(new Account("egor", "1234"));
+
 		// save a couple of customers
 		this.attractions.save(new Attractions("БигБен", "БИГБЕН"));//как в конструкторе класса Attractions
 		this.attractions.save(new Attractions("Мост", "Мост1"));
@@ -52,6 +72,9 @@ public class SampleDataRestApplication implements CommandLineRunner{
 		this.city.save(new City("Atlanta", "USA", "33.7489, -84.3879", "GA"));
 
 		this.customer.save(new Customer("Alice", "Smith"));
+		System.out.println("Account user");
+		Account a = accountRepository.findByUsername("egor");
+		System.out.println(a.getUsername());
 
 		//mongoOperation.save(user);
 
@@ -78,10 +101,10 @@ public class SampleDataRestApplication implements CommandLineRunner{
 		System.out.println();
 		System.out.println(this.city.findByNameAndCountryAllIgnoringCase("London","UK"));*/
 
-/*		System.out.println("City found findByNameLike:");
+		System.out.println("City found findByNameLike:");
 		for (City city: this.city.findByNameLike("Atlanta")){
 			System.out.println(city);
-		}*/
+		}
 
 	}
 
@@ -89,4 +112,50 @@ public class SampleDataRestApplication implements CommandLineRunner{
 		SpringApplication.run(SampleDataRestApplication.class, args);
 	}
 
+}
+
+@Configuration
+class WebSecurityConfiguration extends GlobalAuthenticationConfigurerAdapter {
+
+	@Autowired
+	AccountRepository accountRepository;
+
+	@Override
+	public void init(AuthenticationManagerBuilder auth) throws Exception {
+		auth.userDetailsService(userDetailsService());
+	}
+
+	@Bean
+	UserDetailsService userDetailsService() {
+		return new UserDetailsService() {
+
+			@Override
+			public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+				Account account = accountRepository.findByUsername(username);
+				if(account != null) {
+					return new User(account.getUsername(), account.getPassword(), true, true, true, true,
+							AuthorityUtils.createAuthorityList("USER"));
+				} else {
+					throw new UsernameNotFoundException("could not find the user '"
+							+ username + "'");
+				}
+			}
+		};
+	}
+}
+
+@EnableWebSecurity
+@Configuration
+class WebSecurityConfig extends WebSecurityConfigurerAdapter {
+
+	@Override
+	protected void configure(HttpSecurity http) throws Exception {
+		http
+				.httpBasic().and()
+				.authorizeRequests()
+				.antMatchers(HttpMethod.GET, "/attractions").hasRole("ADMIN")
+				.antMatchers(HttpMethod.PUT, "/customers/**").hasRole("ADMIN")
+				.antMatchers(HttpMethod.PATCH, "/hotels/**").hasRole("ADMIN").and()
+				.csrf().disable();
+	}
 }

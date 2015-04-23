@@ -16,6 +16,10 @@
 
 package sample.data.jpa.domain;
 
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
+
 import java.io.Serializable;
 
 import javax.persistence.Column;
@@ -24,6 +28,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
 @Entity
+@ToString(exclude="id")
 public class City implements Serializable {
 
 	private static final long serialVersionUID = 1L;
@@ -33,16 +38,16 @@ public class City implements Serializable {
 	public Long id;
 
 	@Column(nullable = false)
-	public String name;
+	@Getter @Setter public String name;
 
 	@Column(nullable = false)
-	public String state;
+	@Getter @Setter public String state;
 
 	@Column(nullable = false)
-	public String country;
+	@Getter @Setter public String country;
 
 	@Column(nullable = false)
-	public String map;
+	@Getter @Setter public String map;
 
 	protected City() {
 	}
@@ -53,26 +58,5 @@ public class City implements Serializable {
 		this.country = country;
 		this.map = map;
 		this.state = state;
-	}
-
-	public String getName() {
-		return this.name;
-	}
-
-	public String getState() {
-		return this.state;
-	}
-
-	public String getCountry() {
-		return this.country;
-	}
-
-	public String getMap() {
-		return this.map;
-	}
-
-	@Override
-	public String toString() {
-		return getName() + "," + getState() + "," + getCountry();
 	}
 }
