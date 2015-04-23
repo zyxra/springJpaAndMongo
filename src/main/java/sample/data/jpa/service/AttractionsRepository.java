@@ -11,6 +11,6 @@ import sample.data.jpa.domain.Attractions;
 @RepositoryRestResource(collectionResourceRel = "attaction", path = "attractions")
 public interface AttractionsRepository extends PagingAndSortingRepository<Attractions, Long> {
 
-	public Attractions findByDescription(String description);
+	public Attractions findByDescription(@Param("description") String description);
 
 }
