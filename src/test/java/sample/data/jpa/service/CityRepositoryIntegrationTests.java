@@ -53,13 +53,13 @@ public class CityRepositoryIntegrationTests {
 		assertThat(cities.getTotalElements(), is(greaterThan(20L)));
 	}
 
-	@Test
+/*	@Test
 	public void findByNameAndCountry() {
 		City city = this.repository.findByNameAndCountryAllIgnoringCase("Melbourne",
 				"Australia");
 		assertThat(city, notNullValue());
 		assertThat(city.getName(), is(equalTo("Melbourne")));
-	}
+	}*/
 
 	@Test
 	public void findContaining() {
