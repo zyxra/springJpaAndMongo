@@ -1,0 +1,2 @@
+. ./.env
+curl -u$user:$passwd http://localhost:9000/$1 | json_pp

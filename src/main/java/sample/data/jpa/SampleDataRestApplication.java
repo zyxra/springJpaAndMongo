@@ -117,49 +117,4 @@ public class SampleDataRestApplication implements CommandLineRunner{
 
 }
 
-@Configuration
-class WebSecurityConfiguration extends GlobalAuthenticationConfigurerAdapter {
 
-	@Autowired
-	AccountRepository accountRepository;
-
-	@Override
-	public void init(AuthenticationManagerBuilder auth) throws Exception {
-		auth.userDetailsService(userDetailsService());
-	}
-
-	@Bean
-	UserDetailsService userDetailsService() {
-		return new UserDetailsService() {
-
-			// TODO @Override
-			public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-				Account account = accountRepository.findByUsername(username);
-				if(account != null) {
-					return new User(account.getUsername(), account.getPassword(), true, true, true, true,
-							AuthorityUtils.commaSeparatedStringToAuthorityList("ROLE_USER, ROLE_ADMIN"));
-				} else {
-					throw new UsernameNotFoundException("could not find the user '"
-							+ username + "'");
-				}
-			}
-		};
-	}
-}
-
-@EnableWebSecurity
-@EnableGlobalMethodSecurity(prePostEnabled = true)
-@Configuration
-class WebSecurityConfig extends WebSecurityConfigurerAdapter {
-
-	@Override
-	protected void configure(HttpSecurity http) throws Exception {
-		http
-				.httpBasic().and()
-				.authorizeRequests()
-				.antMatchers(HttpMethod.GET, "/attractions").hasRole("USER")
-				.antMatchers(HttpMethod.PUT, "/customers*").hasRole("ADMIN")
-				.antMatchers(HttpMethod.PATCH, "/hotels*").hasRole("ADMIN").and()
-				.csrf().disable();
-	}
-}
