@@ -24,6 +24,8 @@ import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 
 import sample.data.jpa.domain.City;
 
+import java.util.List;
+
 @RepositoryRestResource(collectionResourceRel = "citys", path = "cities")
 public interface CityRepository extends PagingAndSortingRepository<City, Long> {
 
@@ -31,7 +33,7 @@ public interface CityRepository extends PagingAndSortingRepository<City, Long> {
 			@Param("name") String name, @Param("country") String country,
 			Pageable pageable);
 
-	public City findByNameAndCountryAllIgnoringCase(@Param("name") String name,
+	public List<City> findByNameAndCountryAllIgnoringCase(@Param("name") String name,
 			@Param("country") String country);
 
 	public City findByMap(String map);
