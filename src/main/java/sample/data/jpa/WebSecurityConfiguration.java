@@ -33,7 +33,7 @@ class WebSecurityConfiguration extends GlobalAuthenticationConfigurerAdapter {
                 Account account = accountRepository.findByUsername(username);
                 if(account != null) {
                     return new User(account.getUsername(), account.getPassword(), true, true, true, true,
-                            AuthorityUtils.commaSeparatedStringToAuthorityList("ROLE_USER, ROLE_ADMIN"));
+                            AuthorityUtils.commaSeparatedStringToAuthorityList(account.getRoles()));
                 } else {
                     throw new UsernameNotFoundException("could not find the user '"
                             + username + "'");

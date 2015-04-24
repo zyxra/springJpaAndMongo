@@ -42,6 +42,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Bean;
 
+import java.util.Arrays;
+
 @SpringBootApplication
 public class SampleDataRestApplication implements CommandLineRunner{
 
@@ -63,7 +65,7 @@ public class SampleDataRestApplication implements CommandLineRunner{
 		this.attractions.deleteAll();
 
 		this.accountRepository.deleteAll();
-		this.accountRepository.save(new Account("egor", "1234"));
+		this.accountRepository.save(new Account("egor", "1234", Arrays.asList("ADMIN","USER")));
 
 		// save a couple of customers
 		this.attractions.save(new Attractions("БигБен", "БИГБЕН"));//как в конструкторе класса Attractions

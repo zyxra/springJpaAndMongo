@@ -4,8 +4,14 @@ package sample.data.jpa.domain;
 import javax.persistence.Column;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
+import java.util.Arrays;
+import java.util.Iterator;
+import java.util.List;
 //import javax.persistence.Entity;
 
+//enum Roles  {USER, ADMIN, GUEST};
+//public List<String>  al  =  new List<String>();
 
 public class Account {
 
@@ -16,13 +22,16 @@ public class Account {
     private String username;
     @Column(nullable = false)
     private String password;
-
+    @Column(nullable = false)
+    @ManyToMany
+    private List<String> roles;
 
     public Account(){}
 
-    public Account(String username, String password) {
+    public Account(String username, String password, List<String> roles) {
         this.username = username;
         this.password = password;
+        this.roles = roles;
     }
 
     public String getId() {
@@ -45,11 +54,28 @@ public class Account {
         return this.password;
     }
 
+    public String getRoles() {
+        //List<String> roles = Arrays.asList("ADMIN","USER");
+        String myRole = "";
+        Iterator<String> i = roles.iterator();
+        while (i.hasNext()){
+            myRole = myRole + "RULE_" + i.next();
+            if (i.hasNext()){
+                myRole = myRole + ", ";
+            }
+        }
+        return myRole;
+    }
+
     public void setUsername(String username) {
         this.username = username;
     }
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public void setRoles(List<String> roles) {
+        this.roles = roles;
     }
 }
