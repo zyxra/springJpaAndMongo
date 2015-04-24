@@ -16,21 +16,12 @@
 
 package sample.data.jpa.domain;
 
-import java.io.Serializable;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
-
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
 import org.hibernate.annotations.NaturalId;
 
+import javax.persistence.*;
+import java.io.Serializable;
+
 @Entity
-@ToString(exclude="id")
 public class Hotel implements Serializable {
 
 	private static final long serialVersionUID = 1L;
@@ -41,17 +32,17 @@ public class Hotel implements Serializable {
 
 	@ManyToOne(optional = false)
 	@NaturalId
-	@Getter @Setter private City city;
+	private City city;
 
 	@Column(nullable = false)
 	@NaturalId
-	@Getter @Setter private String name;
+	private String name;
 
 	@Column(nullable = false)
-	@Getter @Setter private String address;
+	private String address;
 
 	@Column(nullable = false)
-	@Getter @Setter private String zip;
+	private String zip;
 
 	protected Hotel() {
 	}
@@ -59,5 +50,41 @@ public class Hotel implements Serializable {
 	public Hotel(City city, String name) {
 		this.city = city;
 		this.name = name;
+	}
+
+	public String toString() {
+		return "sample.data.jpa.domain.Hotel(city=" + this.city + ", name=" + this.name + ", address=" + this.address + ", zip=" + this.zip + ")";
+	}
+
+	public void setCity(City city) {
+		this.city = city;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public void setAddress(String address) {
+		this.address = address;
+	}
+
+	public void setZip(String zip) {
+		this.zip = zip;
+	}
+
+	public City getCity() {
+		return this.city;
+	}
+
+	public String getName() {
+		return this.name;
+	}
+
+	public String getAddress() {
+		return this.address;
+	}
+
+	public String getZip() {
+		return this.zip;
 	}
 }
